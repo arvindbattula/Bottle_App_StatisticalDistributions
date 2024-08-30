@@ -1,4 +1,5 @@
 import numpy as np
+import itertools
 from scipy import stats
 
 def get_distribution_data(distribution, params):
@@ -280,26 +281,55 @@ def get_distribution_data(distribution, params):
         x = np.linspace(0, 5, 1000)
         y = stats.burr12.pdf(x, c=params['c'], d=params['d'], loc=params['loc'], scale=params['scale'])
     elif distribution == 'dagum':
+        # Estimating the PDF for Dagum distribution
+        def dagum_pdf(x, p, a, b):
+            return (a * p / x) * ((x / b) ** (a * p)) / (1 + (x / b) ** a) ** (p + 1)
+        
         x = np.linspace(0, 5, 1000)
-        y = stats.dagum.pdf(x, p=params['p'], c=params['c'], loc=params['loc'], scale=params['scale'])
+        y = dagum_pdf(x, p=params['p'], a=params['a'], b=params['scale'])
     elif distribution == 'fisherz':
+        def fisherz_pdf(x, loc=0, scale=1):
+            z = (x - loc) / scale
+            return np.exp(z - np.log(2) - 0.5 * np.exp(2 * z)) / scale
+        
         x = np.linspace(-5, 5, 1000)
-        y = stats.fisherz.pdf(x, loc=params['loc'], scale=params['scale'])
+        y = fisherz_pdf(x, loc=params['loc'], scale=params['scale'])
     elif distribution == 'frechet_r':
+        def frechet_pdf(x, c, loc, scale):
+            z = (x - loc) / scale
+            return (c / scale) * (z ** (-c - 1)) * np.exp(-z ** (-c)) * (z > 0)
+        
         x = np.linspace(0, 5, 1000)
-        y = stats.frechet_r.pdf(x, c=params['c'], loc=params['loc'], scale=params['scale'])
+        y = frechet_pdf(x, c=params['c'], loc=params['loc'], scale=params['scale'])
     elif distribution == 'kumaraswamy':
+        def kumaraswamy_pdf(x, a, b, loc, scale):
+            x_scaled = (x - loc) / scale
+            return (a * b / scale) * (x_scaled ** (a - 1)) * ((1 - x_scaled ** a) ** (b - 1)) * ((x_scaled >= 0) & (x_scaled <= 1))
+        
         x = np.linspace(0, 1, 1000)
-        y = stats.kumaraswamy.pdf(x, a=params['a'], b=params['b'], loc=params['loc'], scale=params['scale'])
+        y = kumaraswamy_pdf(x, a=params['a'], b=params['b'], loc=params['loc'], scale=params['scale'])
     elif distribution == 'logcauchy':
+        def logcauchy_pdf(x, loc, scale):
+            return 1 / (np.pi * scale * (1 + (np.log((x - loc) / scale))**2))
+        
         x = np.linspace(0, 5, 1000)
-        y = stats.logcauchy.pdf(x, loc=params['loc'], scale=params['scale'])
+        y = logcauchy_pdf(x, loc=params['loc'], scale=params['scale'])
     elif distribution == 'loglogistic':
+        def loglogistic_pdf(x, c, loc, scale):
+            z = (x - loc) / scale
+            return (c / scale) * (z ** (c - 1)) / ((1 + z ** c) ** 2) * (z > 0)
+        
         x = np.linspace(0, 5, 1000)
-        y = stats.loglogistic.pdf(x, c=params['c'], loc=params['loc'], scale=params['scale'])
+        y = loglogistic_pdf(x, c=params['c'], loc=params['loc'], scale=params['scale'])
     elif distribution == 'powerfunction':
-        x = np.linspace(0, 1, 1000)
-        y = stats.powerfunction.pdf(x, a=params['a'], loc=params['loc'], scale=params['scale'])
+        def powerfunction_pdf(x, a, loc, scale):
+            x_scaled = (x - loc) / scale
+            return (a / scale) * (x_scaled ** (a - 1)) * ((x_scaled >= 0) & (x_scaled <= 1))
+        
+        loc=params['loc']
+        scale=params['scale']
+        x = np.linspace(loc, loc + scale, 1000)
+        y = powerfunction_pdf(x, a=params['a'], loc=params['loc'], scale=params['scale'])
     elif distribution == 'uniform':
         x = np.linspace(params['loc'], params['loc'] + params['scale'], 1000)
         y = stats.uniform.pdf(x, loc=params['loc'], scale=params['scale'])
@@ -307,8 +337,13 @@ def get_distribution_data(distribution, params):
         x = np.linspace(-np.pi, np.pi, 1000)
         y = stats.vonmises.pdf(x, kappa=params['kappa'], loc=params['loc'], scale=params['scale'])
     elif distribution == 'wigner':
-        x = np.linspace(-1, 1, 1000)
-        y = stats.wigner.pdf(x, loc=params['loc'], scale=params['scale'])
+        def wigner_semicircle_pdf(x, loc, scale):
+            R = scale
+            z = (x - loc) / R
+            return (2 / (np.pi * R**2)) * np.sqrt(R**2 - (x - loc)**2) * ((z >= -1) & (z <= 1))
+        
+        x = np.linspace(params['loc'] - params['scale'], params['loc'] + params['scale'], 1000)
+        y = wigner_semicircle_pdf(x, loc=params['loc'], scale=params['scale'])
     elif distribution == 'skellam':
         x = np.arange(-10, 11)
         y = stats.skellam.pmf(x, mu1=params['mu1'], mu2=params['mu2'], loc=params['loc'])
@@ -316,43 +351,81 @@ def get_distribution_data(distribution, params):
         x = np.arange(1, 11)
         y = stats.yulesimon.pmf(x, alpha=params['alpha'], loc=params['loc'])
     elif distribution == 'zeta':
+        def zeta_pdf(x, a):
+            return x**(-a) / np.sum(np.arange(1, 10000)**(-a))
+        
         x = np.arange(1, 11)
-        y = stats.zeta.pmf(x, a=params['a'], loc=params['loc'])
+        y = zeta_pdf(x, a=params['a'])
     elif distribution == 'multinomial':
-        x = np.arange(params['n'] + 1)
-        y = stats.multinomial.pmf(x, n=params['n'], p=params['p'])
+        n = params['n']
+        p = params['p']
+        k = len(p)
+        x = np.array(list(itertools.product(range(n+1), repeat=k)))
+        x = x[np.sum(x, axis=1) == n]  # Filter combinations that sum to n
+        y = stats.multinomial.pmf(x, n=n, p=p)
     elif distribution == 'multivariate_normal':
         x, y = np.mgrid[-3:3:.1, -3:3:.1]
         pos = np.dstack((x, y))
-        rv = stats.multivariate_normal(mean=params['mean'], cov=params['cov'])
-        z = rv.pdf(pos)
+        try:
+            rv = stats.multivariate_normal(mean=params['mean'], cov=params['cov'])
+            z = rv.pdf(pos)
+        except np.linalg.LinAlgError:
+            # Handle singular covariance matrix
+            print("Warning: Singular covariance matrix. Using a small regularization.")
+            cov = np.array(params['cov'])
+            cov += np.eye(cov.shape[0]) * 1e-6  # Add small values to diagonal
+            rv = stats.multivariate_normal(mean=params['mean'], cov=cov)
+            z = rv.pdf(pos)
         return {'x': x.tolist(), 'y': y.tolist(), 'z': z.tolist()}
     elif distribution == 'multivariate_t':
         x, y = np.mgrid[-3:3:.1, -3:3:.1]
         pos = np.dstack((x, y))
-        rv = stats.multivariate_t(loc=params['loc'], shape=params['shape'], df=params['df'])
-        z = rv.pdf(pos)
+        try:
+            rv = stats.multivariate_t(loc=params['loc'], shape=params['shape'], df=params['df'])
+            z = rv.pdf(pos)
+        except np.linalg.LinAlgError:
+            print("Warning: Singular shape matrix. Using a small regularization.")
+            shape = np.array(params['shape'])
+            shape += np.eye(shape.shape[0]) * 1e-6  # Add small values to diagonal
+            rv = stats.multivariate_t(loc=params['loc'], shape=shape, df=params['df'])
+            z = rv.pdf(pos)
         return {'x': x.tolist(), 'y': y.tolist(), 'z': z.tolist()}
     elif distribution == 'dirichlet':
         x = np.linspace(0, 1, 100)
         y = np.linspace(0, 1, 100)
         X, Y = np.meshgrid(x, y)
         XY = np.dstack([X, Y, 1-X-Y]).reshape(-1, 3)
+        XY = np.maximum(XY, 0)  # Ensure all values are non-negative
+        XY = XY / XY.sum(axis=1, keepdims=True)  # Normalize to ensure sum is 1
         Z = stats.dirichlet.pdf(XY.T, alpha=params['alpha']).reshape(100, 100)
         return {'x': x.tolist(), 'y': y.tolist(), 'z': Z.tolist()}
     elif distribution == 'wishart':
         x = np.linspace(0, 10, 100)
         y = np.linspace(0, 10, 100)
         X, Y = np.meshgrid(x, y)
-        XY = np.dstack([X, Y]).reshape(-1, 2)
-        Z = stats.wishart.pdf(XY, df=params['df'], scale=params['scale']).reshape(100, 100)
+        XY = np.dstack([X, Y]).reshape(-1, 2, 2)  # Reshape to 2x2 matrices
+        dim = 2  # Dimension of the Wishart distribution
+        df = max(dim + 1, params['df'])  # Ensure df > dim - 1
+        scale = np.array(params['scale']).reshape(2, 2)  # Reshape scale to 2x2 matrix
+        try:
+            Z = stats.wishart.pdf(XY, df=df, scale=scale).reshape(100, 100)
+        except ValueError as e:
+            print(f"Error: {e}")
+            Z = np.zeros((100, 100))  # Return zeros if error occurs
         return {'x': x.tolist(), 'y': y.tolist(), 'z': Z.tolist()}
     elif distribution == 'invwishart':
         x = np.linspace(0, 10, 100)
         y = np.linspace(0, 10, 100)
         X, Y = np.meshgrid(x, y)
-        XY = np.dstack([X, Y]).reshape(-1, 2)
-        Z = stats.invwishart.pdf(XY, df=params['df'], scale=params['scale']).reshape(100, 100)
+        XY = np.dstack([X, Y]).reshape(-1, 2, 2)  # Reshape to 2x2 matrices
+        dim = 2  # Dimension of the Inverse Wishart distribution
+        df = max(dim + 1, params['df'])  # Ensure df > dim + 1
+        scale = np.array(params['scale']).reshape(2, 2)  # Reshape scale to 2x2 matrix
+        try:
+            Z = stats.invwishart.pdf(XY, df=df, scale=scale).reshape(100, 100)
+        except ValueError as e:
+            print(f"Error: {e}")
+            Z = np.zeros((100, 100))  # Return zeros if error occurs
         return {'x': x.tolist(), 'y': y.tolist(), 'z': Z.tolist()}
     elif distribution == 'betabinom':
         x = np.arange(params['n'] + 1)
@@ -361,8 +434,17 @@ def get_distribution_data(distribution, params):
         x = np.arange(min(params['n'], params['M']) + 1)
         y = stats.nhypergeom.pmf(x, M=params['M'], n=params['n'], r=params['r'])
     elif distribution == 'polya':
-        x = np.arange(params['n'] + 1)
-        y = stats.polya.pmf(x, a=params['a'], b=params['b'], loc=params['loc'])
+        def polya_pdf(x, alpha):
+            alpha_sum = np.sum(alpha)
+            x_sum = np.sum(x)
+            numerator = stats.gamma(alpha_sum) / stats.gamma(alpha_sum + x_sum)
+            denominator = np.prod([stats.gamma(a + xi) / (stats.gamma(a) * stats.gamma(xi + 1)) for a, xi in zip(alpha, x)])
+            return numerator * denominator
+        
+        alpha = np.array(params['alpha'])
+        n_samples = 1000
+        x = np.random.multinomial(1, alpha / alpha.sum(), size=n_samples)
+        y = np.apply_along_axis(lambda xi: polya_pdf(xi, alpha), 1, x)
     elif distribution == 'zipf':
         x = np.arange(1, 21)
         y = stats.zipf.pmf(x, a=params['a'])

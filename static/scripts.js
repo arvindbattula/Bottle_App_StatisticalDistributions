@@ -751,10 +751,6 @@ function updateDistribution() {
                 <input type="number" id="p" value="1" step="0.1" min="0">
                 <label for="a">a:</label>
                 <input type="number" id="a" value="1" step="0.1" min="0">
-                <label for="b">b:</label>
-                <input type="number" id="b" value="1" step="0.1" min="0">
-                <label for="loc">loc:</label>
-                <input type="number" id="loc" value="0" step="0.1">
                 <label for="scale">scale:</label>
                 <input type="number" id="scale" value="1" step="0.1" min="0.1">
             `;
@@ -849,12 +845,16 @@ function updateDistribution() {
                 <input type="number" id="mu1" value="1" step="0.1" min="0">
                 <label for="mu2">mu2:</label>
                 <input type="number" id="mu2" value="1" step="0.1" min="0">
+                <label for="loc">loc:</label>
+                <input type="number" id="loc" value="0" step="0.1">
             `;
             break;
         case 'yulesimon':
             parameterControls.innerHTML = `
                 <label for="alpha">alpha:</label>
                 <input type="number" id="alpha" value="1" step="0.1" min="0">
+                <label for="loc">loc:</label>
+                <input type="number" id="loc" value="1" step="0.1">
             `;
             break;
         case 'zeta':
@@ -919,6 +919,8 @@ function updateDistribution() {
                 <input type="number" id="a" value="1" step="0.1" min="0">
                 <label for="b">b:</label>
                 <input type="number" id="b" value="1" step="0.1" min="0">
+                <label for="loc">loc:</label>
+                <input type="number" id="loc" value="0" step="1">
             `;
             break;
         case 'nhypergeom':
@@ -1320,8 +1322,6 @@ function updatePlot() {
         case 'dagum':
             params.p = parseFloat(document.getElementById('p').value);
             params.a = parseFloat(document.getElementById('a').value);
-            params.b = parseFloat(document.getElementById('b').value);
-            params.loc = parseFloat(document.getElementById('loc').value);
             params.scale = parseFloat(document.getElementById('scale').value);
             break;
         case 'fisherz':
@@ -1360,6 +1360,7 @@ function updatePlot() {
         case 'vonmises':
             params.kappa = parseFloat(document.getElementById('kappa').value);
             params.loc = parseFloat(document.getElementById('loc').value);
+            params.scale = parseFloat(document.getElementById('scale').value);
             break;
         case 'wigner':
             params.loc = parseFloat(document.getElementById('loc').value);
@@ -1368,9 +1369,11 @@ function updatePlot() {
         case 'skellam':
             params.mu1 = parseFloat(document.getElementById('mu1').value);
             params.mu2 = parseFloat(document.getElementById('mu2').value);
+            params.loc = parseFloat(document.getElementById('loc').value);
             break;
         case 'yulesimon':
             params.alpha = parseFloat(document.getElementById('alpha').value);
+            params.loc = parseFloat(document.getElementById('loc').value);
             break;
         case 'zeta':
             params.a = parseFloat(document.getElementById('a').value);
@@ -1403,6 +1406,7 @@ function updatePlot() {
             params.n = parseInt(document.getElementById('n').value);
             params.a = parseFloat(document.getElementById('a').value);
             params.b = parseFloat(document.getElementById('b').value);
+            params.loc = parseFloat(document.getElementById('loc').value);
             break;
         case 'nhypergeom':
             params.M = parseInt(document.getElementById('M').value);

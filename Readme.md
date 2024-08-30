@@ -12,15 +12,11 @@ This project is a web application that allows users to visualize and interact wi
 
 The project is organized as follows:
 - `app.py`: The main application file that sets up the Bottle server and handles routing.
-- `templates/`: A directory containing HTML templates for rendering the web pages.
-  - `index.tpl`: The main page where users can select different continuous distributions and adjust the parameters using sliders.
-  - `result.tpl`: The page that displays the results of the selected distribution with the given parameters.
 - `static/`: A directory containing static files such as CSS, JavaScript, and images.
   - `styles.css`: The main stylesheet for the app.
   - `scripts.js`: JavaScript file for handling client-side interactions, such as updating the parameters and displaying the results dynamically.
   - `index.html`: The main file where users can select different continuous distributions and adjust the parameters using input boxes.
 - `distributions.py`: A module containing functions to generate various continuous distributions based on user input.
-- `utils.py`: A utility module with helper functions used throughout the app.
 - `Dockerfile`: The Dockerfile to build the Docker image for the Bottle app.
 - `requirements.txt`: A file listing the Python dependencies required to run the app.
 
