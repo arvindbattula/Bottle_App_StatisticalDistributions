@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Statistical Distributions</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <h1>Statistical Distributions</h1>
+        <div id="login-form">
+            <h2>Login</h2>
+            <input type="text" id="username" placeholder="Username">
+            <input type="password" id="password" placeholder="Password">
+            <button onclick="login()">Login</button>
+        </div>
+        <div id="distribution-selector" style="display: none;">
+            <h2>Select a Distribution</h2>
+            <select id="distribution-select" onchange="updateDistribution()">
+                <option value="normal">Normal Distribution</option>
+                <option value="exponential">Exponential Distribution</option>
+                <option value="gamma">Gamma Distribution</option>
+                <option value="beta">Beta Distribution</option>
+                <option value="lognormal">Lognormal Distribution</option>
+                <option value="chi2">Chi-Squared Distribution</option>
+                <option value="weibull">Weibull Distribution</option>
+                <option value="pareto">Pareto Distribution</option>
+                <option value="cauchy">Cauchy Distribution</option>
+                <option value="f">F-Distribution</option>
+                <option value="binomial">Binomial Distribution</option>
+                <option value="poisson">Poisson Distribution</option>
+                <option value="geometric">Geometric Distribution</option>
+                <option value="negativebinomial">Negative Binomial Distribution</option>
+                <option value="hypergeometric">Hypergeometric Distribution</option>
+                <option value="exponentialpower">Exponential Power Distribution</option>
+                <option value="gumbel">Gumbel Distribution</option>
+                <option value="laplace">Laplace Distribution</option>
+                <option value="logistic">Logistic Distribution</option>
+                <option value="rayleigh">Rayleigh Distribution</option>
+                <option value="wald">Wald Distribution</option>
+                <option value="bernoulli">Bernoulli Distribution</option>
+                <option value="boltzmann">Boltzmann Distribution</option>
+                <option value="bradford">Bradford Distribution</option>
+                <option value="burr">Burr Distribution</option>
+                <option value="chi">Chi Distribution</option>
+                <option value="chi2noncentral">Noncentral Chi-Squared Distribution</option>
+                <option value="dgamma">Double Gamma Distribution</option>
+                <option value="dweibull">Double Weibull Distribution</option>
+                <option value="erlang">Erlang Distribution</option>
+                <option value="exponweib">Exponentiated Weibull Distribution</option>
+                <option value="exponpow">Exponential Power Distribution</option>
+                <option value="fatiguelife">Fatigue Life Distribution</option>
+                <option value="foldcauchy">Folded Cauchy Distribution</option>
+                <option value="foldnorm">Folded Normal Distribution</option>
+                <option value="genexpon">Generalized Exponential Distribution</option>
+                <option value="genextreme">Generalized Extreme Value Distribution</option>
+                <option value="gengamma">Generalized Gamma Distribution</option>
+                <option value="genhalflogistic">Generalized Half Logistic Distribution</option>
+                <option value="genlogistic">Generalized Logistic Distribution</option>
+                <option value="gennorm">Generalized Normal Distribution</option>
+                <option value="genpareto">Generalized Pareto Distribution</option>
+                <option value="genpowernorm">Generalized Power Normal Distribution</option>
+                <option value="gilbrat">Gilbrat Distribution</option>
+                <option value="gompertz">Gompertz Distribution</option>
+                <option value="gumbel_r">Right-skewed Gumbel Distribution</option>
+                <option value="halfcauchy">Half Cauchy Distribution</option>
+                <option value="halfgennorm">Half Generalized Normal Distribution</option>
+                <option value="halflogistic">Half Logistic Distribution</option>
+                <option value="halfnorm">Half Normal Distribution</option>
+                <option value="hypsecant">Hyperbolic Secant Distribution</option>
+                <option value="invgamma">Inverse Gamma Distribution</option>
+                <option value="invgauss">Inverse Gaussian Distribution</option>
+                <option value="invweibull">Inverse Weibull Distribution</option>
+                <option value="johnsonsb">Johnson SB Distribution</option>
+                <option value="johnsonsu">Johnson SU Distribution</option>
+                <option value="kappa4">Kappa 4 Distribution</option>
+                <option value="kappa3">Kappa 3 Distribution</option>
+                <option value="ksone">Kolmogorov-Smirnov One-Sided Distribution</option>
+                <option value="kstwobign">Kolmogorov-Smirnov Two-Sided Big N Distribution</option>
+                <option value="levy">Levy Distribution</option>
+                <option value="levy_l">Left-skewed Levy Distribution</option>
+                <option value="loggamma">Log-Gamma Distribution</option>
+                <option value="loglaplace">Log-Laplace Distribution</option>
+                <option value="lognorm">Log-Normal Distribution</option>
+                <option value="lomax">Lomax Distribution</option>
+                <option value="maxwell">Maxwell Distribution</option>
+                <option value="mielke">Mielke Beta-Kappa Distribution</option>
+                <option value="nakagami">Nakagami Distribution</option>
+                <option value="ncf">Noncentral F-Distribution</option>
+                <option value="nct">Noncentral Student's t-Distribution</option>
+                <option value="ncx2">Noncentral Chi-Squared Distribution</option>
+                <option value="norminvgauss">Normal Inverse Gaussian Distribution</option>
+                <option value="pareto">Pareto Distribution</option>
+                <option value="pearson3">Pearson Type III Distribution</option>
+                <option value="powerlaw">Power Law Distribution</option>
+                <option value="powerlognorm">Power Log Normal Distribution</option>
+                <option value="powernorm">Power Normal Distribution</option>
+                <option value="rdist">R Distribution</option>
+                <option value="recipinvgauss">Reciprocal Inverse Gaussian Distribution</option>
+                <option value="rice">Rice Distribution</option>
+                <option value="reciprocal">Reciprocal Distribution</option>
+                <option value="semicircular">Semicircular Distribution</option>
+                <option value="skewnorm">Skew Normal Distribution</option>
+                <option value="t">Student's t-Distribution</option>
+                <option value="trapezoid">Trapezoid Distribution</option>
+                <option value="triang">Triangular Distribution</option>
+                <option value="truncexpon">Truncated Exponential Distribution</option>
+                <option value="truncnorm">Truncated Normal Distribution</option>
+                <option value="tukeylambda">Tukey-Lambda Distribution</option>
+            </select>
+            <div id="parameter-controls"></div>
+            <div id="plot"></div>
+        </div>
+    </div>
+    <script src="/static/scripts.js"></script>
+</body>
+
+</html>
