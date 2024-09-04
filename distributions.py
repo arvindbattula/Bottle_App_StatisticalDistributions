@@ -40,7 +40,7 @@ def get_distribution_data(distribution, params):
     elif distribution == 'hypergeometric':
         x = np.arange(0, min(params['n'], params['N'])+1)
         y = stats.hypergeom.pmf(x, M=params['K'], n=params['n'], N=params['N'])
-    elif distribution == 'negative_binomial':
+    elif distribution == 'negativebinomial':
         x = np.arange(0, 20)
         y = stats.nbinom.pmf(x, n=params['n'], p=params['p'])
     elif distribution == 'wald':
@@ -69,7 +69,7 @@ def get_distribution_data(distribution, params):
         y = stats.cauchy.pdf(x, loc=params['x0'], scale=params['gamma'])
     elif distribution == 'exponentialpower':
         x = np.linspace(0, 5, 1000)
-        y = stats.exponpow.pdf(x, b=params['b'], scale=params['scale'])
+        y = stats.exponpow.pdf(x, b=params['b'],loc=params['loc'],scale=params['scale'])
     elif distribution == 'bernoulli':
         x = np.arange(0, 2)
         y = stats.bernoulli.pmf(x, p=params['p'])

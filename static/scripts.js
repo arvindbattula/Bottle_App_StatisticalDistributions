@@ -48,6 +48,16 @@ function updateDistribution() {
                 <input type="number" id="lambda" value="1" step="0.1" min="0.1">
             `;
             break;
+        case 'exponentialpower':
+            parameterControls.innerHTML = `
+                <label for="b">b:</label>
+                <input type="number" id="b" value="1" step="0.1" min="0.1">
+                <label for="loc">loc:</label>
+                <input type="number" id="loc" value="0" step="0.1">
+                <label for="scale">scale:</label>
+                <input type="number" id="scale" value="1" step="0.1" min="0.1">
+            `;
+            break;
         case 'gamma':
             parameterControls.innerHTML = `
                 <label for="k">k (shape):</label>
@@ -161,6 +171,14 @@ function updateDistribution() {
             `;
             break;
         case 'binomial':
+            parameterControls.innerHTML = `
+                <label for="n">n:</label>
+                <input type="number" id="n" value="10" step="1" min="1">
+                <label for="p">p:</label>
+                <input type="number" id="p" value="0.5" step="0.1" min="0" max="1">
+            `;
+            break;
+        case 'negativebinomial':
             parameterControls.innerHTML = `
                 <label for="n">n:</label>
                 <input type="number" id="n" value="10" step="1" min="1">
@@ -964,6 +982,11 @@ function updatePlot() {
         case 'exponential':
             params.lambda = parseFloat(document.getElementById('lambda').value);
             break;
+        case 'exponentialpower':
+            params.b = parseFloat(document.getElementById('b').value);
+            params.loc = parseFloat(document.getElementById('loc').value);
+            params.scale = parseFloat(document.getElementById('scale').value);
+            break;
         case 'gamma':
             params.k = parseFloat(document.getElementById('k').value);
             params.theta = parseFloat(document.getElementById('theta').value);
@@ -1021,6 +1044,10 @@ function updatePlot() {
             params.p = parseFloat(document.getElementById('p').value);
             break;
         case 'binomial':
+            params.n = parseFloat(document.getElementById('n').value);
+            params.p = parseFloat(document.getElementById('p').value);
+            break;
+        case 'negativebinomial':
             params.n = parseFloat(document.getElementById('n').value);
             params.p = parseFloat(document.getElementById('p').value);
             break;
