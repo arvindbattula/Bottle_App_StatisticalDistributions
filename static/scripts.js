@@ -617,6 +617,16 @@ function updateDistribution() {
                 <input type="number" id="scale" value="1" step="0.1" min="0.1">
             `;
             break;
+        case 'exponpow':
+            parameterControls.innerHTML = `
+                <label for="b">b:</label>
+                <input type="number" id="b" value="1" step="0.1" min="0">
+                <label for="c">c:</label>
+                <input type="number" id="loc" value="0" step="0.1">
+                <label for="scale">scale:</label>
+                <input type="number" id="scale" value="1" step="0.1" min="0.1">
+            `;
+            break;
         case 'rdist':
             parameterControls.innerHTML = `
                 <label for="c">c:</label>
@@ -763,6 +773,12 @@ function updateDistribution() {
                 <input type="number" id="scale" value="1" step="0.1" min="0.1">
             `;
             break;
+        case 'boltzmann':
+            parameterControls.innerHTML = `
+                <label for="lambda">lambda:</label>
+                <input type="number" id="lambda" value="1" step="0.1" min="0">
+            `;
+            break;
         case 'dagum':
             parameterControls.innerHTML = `
                 <label for="p">p:</label>
@@ -791,12 +807,44 @@ function updateDistribution() {
                 <input type="number" id="scale" value="1" step="0.1" min="0.1">
             `;
             break;
+        case 'exponweib':
+            parameterControls.innerHTML = `
+                <label for="a">a:</label>
+                <input type="number" id="a" value="1" step="0.1" min="0">
+                <label for="c">c:</label>
+                <input type="number" id="c" value="1" step="0.1" min="0">
+                <label for="loc">loc:</label>
+                <input type="number" id="loc" value="0" step="0.1">
+                <label for="scale">scale:</label>
+                <input type="number" id="scale" value="1" step="0.1" min="0.1">
+            `;
+            break;
         case 'kumaraswamy':
             parameterControls.innerHTML = `
                 <label for="a">a:</label>
                 <input type="number" id="a" value="1" step="0.1" min="0">
                 <label for="b">b:</label>
                 <input type="number" id="b" value="1" step="0.1" min="0">
+                <label for="loc">loc:</label>
+                <input type="number" id="loc" value="0" step="0.1">
+                <label for="scale">scale:</label>
+                <input type="number" id="scale" value="1" step="0.1" min="0.1">
+            `;
+            break;
+        case 'foldcauchy':
+            parameterControls.innerHTML = `
+                <label for="c">c:</label>
+                <input type="number" id="c" value="1" step="0.1" min="0">
+                <label for="loc">loc:</label>
+                <input type="number" id="loc" value="0" step="0.1">
+                <label for="scale">scale:</label>
+                <input type="number" id="scale" value="1" step="0.1" min="0.1">
+            `;
+            break;
+        case 'foldnorm':
+            parameterControls.innerHTML = `
+                <label for="c">c:</label>
+                <input type="number" id="c" value="1" step="0.1" min="0">
                 <label for="loc">loc:</label>
                 <input type="number" id="loc" value="0" step="0.1">
                 <label for="scale">scale:</label>
@@ -843,6 +891,16 @@ function updateDistribution() {
             parameterControls.innerHTML = `
                 <label for="kappa">kappa:</label>
                 <input type="number" id="kappa" value="1" step="0.1" min="0">
+                <label for="loc">loc:</label>
+                <input type="number" id="loc" value="0" step="0.1">
+                <label for="scale">scale:</label>
+                <input type="number" id="scale" value="1" step="0.1" min="0.1">
+            `;
+            break;
+        case 'gennorm':
+            parameterControls.innerHTML = `
+                <label for="beta">beta:</label>
+                <input type="number" id="beta" value="1" step="0.1" min="0">
                 <label for="loc">loc:</label>
                 <input type="number" id="loc" value="0" step="0.1">
                 <label for="scale">scale:</label>
@@ -1032,6 +1090,12 @@ function updatePlot() {
             params.mu = parseFloat(document.getElementById('mu').value);
             params.s = parseFloat(document.getElementById('s').value);
             break;
+        case 'exponweib':
+            params.a = parseFloat(document.getElementById('a').value);
+            params.c = parseFloat(document.getElementById('c').value);
+            params.loc = parseFloat(document.getElementById('loc').value);
+            params.scale = parseFloat(document.getElementById('scale').value);
+            break;
         case 'wald':
             params.mu = parseFloat(document.getElementById('mu').value);
             params.lambda = parseFloat(document.getElementById('lambda').value);
@@ -1062,8 +1126,16 @@ function updatePlot() {
         case 'poisson':
             params.lambda = parseFloat(document.getElementById('lambda').value);
             break;
+        case 'exponpow':
+            params.b = parseFloat(document.getElementById('b').value);
+            params.loc = parseFloat(document.getElementById('loc').value);
+            params.scale = parseFloat(document.getElementById('scale').value);
+            break;
         case 'bradford':
             params.c = parseFloat(document.getElementById('c').value);
+            break;
+        case 'boltzmann':
+            params.lambda = parseFloat(document.getElementById('lambda').value);
             break;
         case 'burr':
             params.c = parseFloat(document.getElementById('c').value);
@@ -1076,6 +1148,11 @@ function updatePlot() {
         case 'chi2noncentral':
             params.df = parseFloat(document.getElementById('df').value);
             params.nc = parseFloat(document.getElementById('nc').value);
+            break;
+        case 'gennorm':
+            params.beta = parseFloat(document.getElementById('beta').value);
+            params.loc = parseFloat(document.getElementById('loc').value);
+            params.scale = parseFloat(document.getElementById('scale').value);
             break;
         case 'dgamma':
             params.a = parseFloat(document.getElementById('a').value);
@@ -1093,8 +1170,18 @@ function updatePlot() {
             params.loc = parseFloat(document.getElementById('loc').value);
             params.scale = parseFloat(document.getElementById('scale').value);
             break;
+        case 'foldcauchy':
+            params.c = parseFloat(document.getElementById('c').value);
+            params.loc = parseFloat(document.getElementById('loc').value);
+            params.scale = parseFloat(document.getElementById('scale').value);
+            break;
         case 'invgamma':
             params.a = parseFloat(document.getElementById('a').value);
+            params.loc = parseFloat(document.getElementById('loc').value);
+            params.scale = parseFloat(document.getElementById('scale').value);
+            break;
+        case 'foldnorm':
+            params.c = parseFloat(document.getElementById('c').value);
             params.loc = parseFloat(document.getElementById('loc').value);
             params.scale = parseFloat(document.getElementById('scale').value);
             break;

@@ -67,7 +67,7 @@ def get_distribution_data(distribution, params):
     elif distribution == 'cauchy':
         x = np.linspace(-10, 10, 1000)
         y = stats.cauchy.pdf(x, loc=params['x0'], scale=params['gamma'])
-    elif distribution == 'exponentialpower':
+    elif distribution == 'exponpow':
         x = np.linspace(0, 5, 1000)
         y = stats.exponpow.pdf(x, b=params['b'],loc=params['loc'],scale=params['scale'])
     elif distribution == 'bernoulli':
@@ -75,7 +75,7 @@ def get_distribution_data(distribution, params):
         y = stats.bernoulli.pmf(x, p=params['p'])
     elif distribution == 'boltzmann':
         x = np.linspace(0, 5, 1000)
-        y = stats.boltzmann.pmf(x, lambda_=params['lambda_'])
+        y = stats.boltzmann.pmf(x, lambda_=params['lambda'])
     elif distribution == 'bradford':
         x = np.linspace(0, 5, 1000)
         y = stats.bradford.pdf(x, c=params['c'])
@@ -86,8 +86,8 @@ def get_distribution_data(distribution, params):
         x = np.linspace(0, 5, 1000)
         y = stats.chi.pdf(x, df=params['df'])
     elif distribution == 'chi2noncentral':
-        x = np.linspace(0, 5, 1000)
-        y = stats.chi2nonc.pdf(x, df=params['df'], nc=params['nc'])
+        x = np.linspace(0, 20, 1000)  # Increased upper bound to better show the distribution
+        y = stats.ncx2.pdf(x, df=params['df'], nc=params['nc'])
     elif distribution == 'dgamma':
         x = np.linspace(0, 5, 1000)
         y = stats.dgamma.pdf(x, a=params['a'], scale=params['scale'])
@@ -102,16 +102,17 @@ def get_distribution_data(distribution, params):
         y = stats.exponnorm.pdf(x, K=params['K'], loc=params['loc'], scale=params['scale'])
     elif distribution == 'exponweib':
         x = np.linspace(0, 5, 1000)
-        y = stats.exponweib.pdf(x, c=params['c'], a=params['a'], scale=params['scale'])
+        y = stats.exponweib.pdf(x, c=params['c'], a=params['a'], scale=params['scale'], loc=params['loc'])
     elif distribution == 'fisk':
         x = np.linspace(0, 5, 1000)
         y = stats.fisk.pdf(x, c=params['c'], scale=params['scale'])
     elif distribution == 'foldcauchy':
         x = np.linspace(0, 5, 1000)
-        y = stats.foldcauchy.pdf(x, c=params['c'], scale=params['scale'])
+        y = stats.foldcauchy.pdf(x, c=params['c'], loc=params['loc'], scale=params['scale'])
     elif distribution == 'foldnorm':
         x = np.linspace(0, 5, 1000)
-        y = stats.foldnorm.pdf(x, c=params['c'], scale=params['scale'])
+        y = stats.foldnorm.pdf(x, c=params['c'], loc=params['loc']
+        , scale=params['scale'])
     elif distribution == 'genlogistic':
         x = np.linspace(0, 5, 1000)
         y = stats.genlogistic.pdf(x, c=params['c'], loc=params['loc'], scale=params['scale'])
