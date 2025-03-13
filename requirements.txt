@@ -3,4 +3,6 @@ numpy==1.21.0
 scipy==1.7.0
 plotly==5.3.1
 PyJWT==2.3.0
-
+pytest==7.3.1
+pytest-cov==4.1.0
+python-dotenv==1.0.0
