@@ -23,14 +23,23 @@ This application provides an interactive platform for users to explore various s
 
 ## Project Structure
 ├── app.py # Main application entry point
+
 ├── auth.py # Authentication and authorization logic
+
 ├── distributions.py # Statistical distribution calculations
+
 ├── Dockerfile # Docker configuration
+
 ├── requirements.txt # Python dependencies
+
 ├── static/ # Frontend assets
+
 │ ├── index.html # Main HTML page
+
 │ ├── scripts.js # Frontend JavaScript
+
 │ └── styles.css # CSS styling
+
 └── test.py # Test suite
 
 
